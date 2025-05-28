@@ -22,6 +22,9 @@ func main() {
 			cmd.Clear,
 			cmd.Alias,
 			cmd.Link,
+			cmd.Compare,
+			cmd.Benchmark,
+			cmd.History,
 		},
 	}
 
