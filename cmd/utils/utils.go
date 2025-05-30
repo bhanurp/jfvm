@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
+	"strings"
 )
 
 const (
@@ -41,4 +42,34 @@ func ResolveAlias(name string) (string, error) {
 		return "", err
 	}
 	return string(data), nil
+}
+
+// ResolveVersionOrAlias attempts to resolve an alias first, then falls back to the original name
+func ResolveVersionOrAlias(name string) (string, error) {
+	// Try to resolve as alias first
+	resolved, err := ResolveAlias(name)
+	if err == nil {
+		return strings.TrimSpace(resolved), nil
+	}
+
+	// If not an alias, return the original name
+	return name, nil
+}
+
+// CheckVersionExists verifies that a version directory and binary exist
+func CheckVersionExists(version string) error {
+	versionDir := filepath.Join(JfvmVersions, version)
+	binaryPath := filepath.Join(versionDir, BinaryName)
+
+	// Check if version directory exists
+	if _, err := os.Stat(versionDir); os.IsNotExist(err) {
+		return fmt.Errorf("version directory does not exist")
+	}
+
+	// Check if binary exists
+	if _, err := os.Stat(binaryPath); os.IsNotExist(err) {
+		return fmt.Errorf("binary not found in version directory")
+	}
+
+	return nil
 }

@@ -1,8 +1,8 @@
-.PHONY: build install uninstall clean bootstrap
+.PHONY: build install uninstall clean bootstrap test
 
 JFVM_BIN := jfvm
 SHIM_BIN := jf
-BIN_DIR := $(HOME)/.jfvm/bin
+SHIM_DIR := $(HOME)/.jfvm/shim
 
 build:
 	@echo "🔧 Building jfvm CLI..."
@@ -11,23 +11,30 @@ build:
 	cd shim && go build -o $(SHIM_BIN) .
 
 install: build
-	@echo "📂 Creating bin directory: $(BIN_DIR)"
-	mkdir -p $(BIN_DIR)
-	@echo "📥 Installing binaries to $(BIN_DIR)"
-	cp $(JFVM_BIN) $(BIN_DIR)/
-	cp shim/$(SHIM_BIN) $(BIN_DIR)/
+	@echo "📂 Creating shim directory: $(SHIM_DIR)"
+	mkdir -p $(SHIM_DIR)
+	@echo "📥 Installing binaries to $(SHIM_DIR)"
+	cp $(JFVM_BIN) $(SHIM_DIR)/
+	cp shim/$(SHIM_BIN) $(SHIM_DIR)/
 	@echo "✅ Binaries installed."
 
 bootstrap: install
 	@echo "🔁 Checking shell config for PATH..."
-	@grep -q '.jfvm/bin' ~/.bashrc 2>/dev/null || echo 'export PATH="$$HOME/.jfvm/bin:$$PATH"' >> ~/.bashrc
-	@grep -q '.jfvm/bin' ~/.zshrc 2>/dev/null || echo 'export PATH="$$HOME/.jfvm/bin:$$PATH"' >> ~/.zshrc
-	@grep -q '.jfvm/bin' ~/.profile 2>/dev/null || echo 'export PATH="$$HOME/.jfvm/bin:$$PATH"' >> ~/.profile
+	@grep -q '.jfvm/shim' ~/.bashrc 2>/dev/null || echo 'export PATH="$$HOME/.jfvm/shim:$$PATH"' >> ~/.bashrc
+	@grep -q '.jfvm/shim' ~/.zshrc 2>/dev/null || echo 'export PATH="$$HOME/.jfvm/shim:$$PATH"' >> ~/.zshrc
+	@grep -q '.jfvm/shim' ~/.profile 2>/dev/null || echo 'export PATH="$$HOME/.jfvm/shim:$$PATH"' >> ~/.profile
 	@echo "✅ PATH updated in shell config. Run 'source ~/.bashrc' or 'source ~/.zshrc' to apply."
+
+test: build
+	@echo "🧪 Running basic functionality tests..."
+	@./$(JFVM_BIN) --help > /dev/null && echo "✅ jfvm help works"
+	@./$(JFVM_BIN) list > /dev/null && echo "✅ jfvm list works"
+	@./$(JFVM_BIN) history > /dev/null && echo "✅ jfvm history works"
+	@echo "✅ All basic tests passed!"
 
 uninstall:
 	@echo "🗑️ Removing installed binaries..."
-	rm -f $(BIN_DIR)/$(JFVM_BIN) $(BIN_DIR)/$(SHIM_BIN)
+	rm -f $(SHIM_DIR)/$(JFVM_BIN) $(SHIM_DIR)/$(SHIM_BIN)
 	@echo "✅ Uninstalled."
 
 clean:
