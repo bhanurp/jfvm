@@ -6,15 +6,17 @@ import (
 	"path/filepath"
 	"strings"
 
+	"github.com/bhanurp/jfvm/cmd/descriptions"
 	"github.com/bhanurp/jfvm/cmd/utils"
 	"github.com/bhanurp/jfvm/internal"
 	"github.com/urfave/cli/v2"
 )
 
 var Use = &cli.Command{
-	Name:      "use",
-	Usage:     "Set a specific JFrog CLI version as active",
-	ArgsUsage: "[version or alias] (optional if .jfrog-version exists)",
+	Name:        "use",
+	Usage:       descriptions.Use.Usage,
+	ArgsUsage:   "[version or alias] (optional if .jfrog-version exists)",
+	Description: descriptions.Use.Format(),
 	Action: func(c *cli.Context) error {
 		fmt.Println("Executing 'jfvm use' command...")
 		var version string
@@ -29,7 +31,8 @@ var Use = &cli.Command{
 				version = strings.TrimSpace(resolved)
 				fmt.Printf("Using alias '%s' resolved to version: %s\n", v, version)
 			} else {
-				version = v // don't log anything — just fallback silently
+				// don't log anything — just fallback silently
+				version = v
 			}
 		} else {
 			v, err := utils.GetVersionFromProjectFile()
