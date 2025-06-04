@@ -103,13 +103,9 @@ func runInitWizard(projectType string) error {
 		setupShellIntegration()
 	}
 
-	// Step 8: Fun stuff!
-	if askYesNo("Enable fun mode features? (You'll love this!)") {
-		enableFunMode()
-	}
-
 	fmt.Printf("\n🎉 Setup completed successfully!\n")
 	fmt.Printf("Run 'jfvm list' to get started.\n")
+	fmt.Printf("💡 Try 'jfvm translate \"jf rt upload myfile.jar\" --lang pirate' for some fun!\n")
 
 	return nil
 }
@@ -296,17 +292,6 @@ func setupShellIntegration() {
 	}
 
 	fmt.Printf("   💡 Please restart your shell or run: source ~/.zshrc\n")
-}
-
-func enableFunMode() {
-	funConfigPath := filepath.Join(utils.JfvmRoot, "fun-mode")
-	os.WriteFile(funConfigPath, []byte("enabled"), 0644)
-
-	fmt.Printf("🎮 Fun mode enabled! Try these commands:\n")
-	fmt.Printf("   • jfvm fortune\n")
-	fmt.Printf("   • jfvm roulette\n")
-	fmt.Printf("   • jfvm pet\n")
-	fmt.Printf("   • jfvm motivate\n")
 }
 
 func importExistingConfigurations(installations []JFInstallation) {

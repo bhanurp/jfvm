@@ -52,7 +52,7 @@ make install
 ## 📦 Commands
 
 ### `jfvm install <version>`
-Installs the specified version of JFrog CLI (`jf`) from JFrog’s public release server.
+Installs the specified version of JFrog CLI (`jf`) from JFrog's public release server.
 ```bash
 jfvm install 2.74.0
 ```
@@ -88,12 +88,72 @@ Defines an alias for a specific version.
 jfvm alias dev 2.74.0
 ```
 
-### `jfvm link --from <path> --name <name>`
+### `jfvm link --from <path> --name <n>`
 Links a **locally built `jf` binary** to be used via `jfvm`.
 ```bash
 jfvm link --from /Users/bhanu/go/bin/jf --name local-dev
 jfvm use local-dev
 ```
+
+### `jf init [options]`
+Initialize JFrog CLI configuration with interactive prompts. Supports various authentication methods and server configurations.
+
+```bash
+# Basic interactive initialization
+jf init
+
+# Initialize with specific server type
+jf init --server-type artifactory
+
+# Initialize with specific auth method
+jf init --auth-method apikey
+
+# Non-interactive initialization with environment variables
+export JFROG_URL="https://your-instance.jfrog.io"
+export JFROG_ACCESS_TOKEN="your-access-token"
+jf init --non-interactive
+```
+
+Available options:
+- `--server-type`: Type of server to configure (artifactory, distribution, xray)
+- `--auth-method`: Authentication method (apikey, accesstoken, basic)
+- `--non-interactive`: Use environment variables instead of prompts
+- `--overwrite`: Overwrite existing configuration if present
+
+### `jf translate [command] [options]`
+Transform boring JF commands into hilarious entertainment! Perfect for demos, team presentations, or just adding some fun to your DevOps workflow.
+
+```bash
+# Basic usage with default pirate style
+jf translate "jf rt upload myfile.jar"
+🏴‍☠️ Arrr, me hearty! Captain JFrog be commandin' ye to take this fine treasure 'myfile.jar' from yer ship's hold...
+
+# Use a specific style
+jf translate "jf rt search *.jar" --style corporate
+💼 Moving forward, we need to leverage our core competencies to strategically locate artifacts matching '*.jar'...
+
+# Random style
+jf translate "jf rt download" --random
+🎲 Get a surprise translation style each time!
+
+# Chain multiple translations for maximum chaos
+jf translate "jf rt ping" --chain
+⛓️ Watch your command go through multiple hilarious transformations!
+
+# Custom style
+jf translate "jf rt upload" --custom "like a grumpy cat who drinks too much coffee"
+😾 *grumbles while sipping espresso* Fine, I'll upload your files... *knocks coffee mug off the desk*
+```
+
+### Available Styles
+- 🎭 **Character Styles**: pirate, shakespeare, yoda, wizard, ninja, cowboy, robot, alien, vampire, superhero, dragon, unicorn, mermaid
+- 💼 **Professional**: corporate, technical, formal, military, lawyer, doctor, engineer
+- 🗺️ **Regional**: british, aussie, canadian, valley, surfer, southern, newyork
+- 😄 **Emotional**: excited, angry, confused, zen, sarcastic, dramatic, depressed
+- 🎮 **Internet/Gaming**: hacker, gamer, millennial, influencer, memer, streamer, youtuber
+- ⏰ **Time Periods**: ancient, medieval, vintage, modern, future, prehistoric, renaissance
+- 👻 **Supernatural**: ghost, witch, angel, demon, spirit
+- And many more!
 
 ---
 

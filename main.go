@@ -23,16 +23,7 @@ func main() {
 			cmd.Clear,
 			cmd.Alias,
 			cmd.Link,
-
-			// Smart features
 			cmd.Init,
-			cmd.Detect,
-
-			// Fun features
-			cmd.Fortune,
-			cmd.Roulette,
-			cmd.Pet,
-			cmd.Motivate,
 			cmd.Translate,
 		},
 	}
