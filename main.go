@@ -15,6 +15,7 @@ func main() {
 		Usage:                "Manage multiple versions of JFrog CLI",
 		EnableBashCompletion: true,
 		Commands: []*cli.Command{
+			// Core functionality
 			cmd.Install,
 			cmd.Use,
 			cmd.List,
@@ -22,6 +23,8 @@ func main() {
 			cmd.Clear,
 			cmd.Alias,
 			cmd.Link,
+			cmd.Init,
+			cmd.Translate,
 		},
 	}
 
