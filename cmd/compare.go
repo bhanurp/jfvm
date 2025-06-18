@@ -159,9 +159,25 @@ func executeJFCommand(ctx context.Context, version string, jfCommand []string) (
 			result.ExitCode = 1
 		}
 		result.ErrorMsg = stderr.String()
+	} else {
+		// When command succeeds, combine stdout and stderr for output comparison
+		// Many CLI tools write informational messages to stderr even on success
+		stdoutStr := stdout.String()
+		stderrStr := stderr.String()
+
+		if stdoutStr != "" && stderrStr != "" {
+			result.Output = stdoutStr + "\n" + stderrStr
+		} else if stdoutStr != "" {
+			result.Output = stdoutStr
+		} else {
+			result.Output = stderrStr
+		}
 	}
 
-	result.Output = stdout.String()
+	// Keep original stdout for cases where only stdout is needed
+	if result.ExitCode == 0 && result.Output == "" {
+		result.Output = stdout.String()
+	}
 
 	return result, nil
 }
@@ -223,7 +239,9 @@ func displayComparison(result1, result2 ExecutionResult, unified, noColor, showT
 	output1 := strings.TrimSpace(result1.Output)
 	output2 := strings.TrimSpace(result2.Output)
 
-	if output1 == output2 {
+	// Commands with different exit codes should never be considered identical
+	// Even if their stdout happens to be the same, they represent different execution results
+	if output1 == output2 && result1.ExitCode == result2.ExitCode && result1.ErrorMsg == result2.ErrorMsg {
 		fmt.Printf("✅ OUTPUTS ARE IDENTICAL\n")
 		fmt.Printf("📄 Output (%d lines):\n", len(strings.Split(output1, "\n")))
 		fmt.Printf("─────────────────────────────────────────────────────────────────────────────────────\n")
